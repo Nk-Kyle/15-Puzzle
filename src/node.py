@@ -13,12 +13,9 @@ class Node(object):
         for i in range(4):
             for j in range(4):
                 refer = self.state[i][j]
-                temp += self.hamdist(refer,i,j)
+                if (refer != 16 and i*4+j+1 != refer):
+                    temp += 1
         return temp
 
-    def hamdist(self,val, i, j):
-        row = val//4
-        col = val%4
-        return(abs(row-i) + abs(col-i))
     def __lt__(self, other):
         return self.c < other.c

@@ -1,28 +1,61 @@
 import heapq
-from time import sleep
 from node import *
 from copy import deepcopy
 from heapq import *
 from puzzle import *
-directions = {'U' : [0,1], 'D' : [0,-1], 'R' : [1,0], 'L' : [-1,0]}
+directions = {'R' : [0,1], 'L' : [0,-1], 'D' : [1,0], 'U' : [-1,0]}
 nodes = []
-goalState = [[2,1,3,4], [5,6,7,8],[9,10,11,12],[13,14,15,16]]
-hashes = []
+goalState = [[1,2,3,4], [5,6,7,8],[9,10,11,12],[13,14,15,16]]
+hashes = {}
 isFound = False
+comparisons = 0
+resultNode : Node
+
+def hashState(mat):
+    idx = 0
+    for i in range(16):
+        row = i // 4
+        col = i %4
+        val = mat[row][col]
+        idx |= i << (val * 4)
+    return idx
+    
+hashgoal = hashState(goalState)
 
 def solve(mat):
+    global resultNode
+    global hashes
+    global isFound
+    global comparisons
+    global nodes
+    nodes = []
+    comparisons = 0
+    isFound = False
+    hashes = {}
     x,y = findBlank(mat)
     newNode = Node(mat,None,0,None,[x,y])
     heappush(nodes,newNode )
-    while(len(nodes) > 0):
-        if(isFound):
-            if(nodes[0].c() > resultNode.c()):
-                break
-        if (isFound):
-            print(isFound)
-        evalNode = heappop(nodes)
-        evalChilds(evalNode)
-    return resultNode
+    if(hashState(mat) != hashgoal):
+        while(len(nodes) > 0):
+            if(isFound):
+                #Bound any further search if goal is found and head of priority worse than resultNode
+                if(nodes[0].c >= resultNode.c):
+                    break
+            evalNode = heappop(nodes)
+            evalChilds(evalNode)
+        path = getPath(resultNode)
+    else:
+        path = [newNode]
+
+    return path, comparisons
+
+def getPath(CurNode):
+    path = []
+    while(CurNode.parent != None):
+        path.append(CurNode)
+        CurNode = CurNode.parent
+    path.append(CurNode)
+    return path
 
 def findBlank(mat):
     for i in range(4):
@@ -32,31 +65,29 @@ def findBlank(mat):
 
 def evalChilds(curnode):
     global hashes
+    global resultNode
+    global isFound
+    global comparisons
     for dir in directions:
         if (validMove(curnode,dir)):
             newMat = swap(curnode,dir)
-            hashval = hash(newMat)
-            if(hashval == hash(goalState)):
-                global resultNode
-                global isFound
+            # hashstates to avoid duplicates
+            hashval = hashState(newMat)
+            if(hashval == hashgoal):
                 isFound = True
-                resultNode = Node(newMat, curnode, curnode.f + 1, dir,[x + y for x,y in zip(curnode.blank, directions[dir])])
+                resultNode = Node(newMat, curnode, curnode.f + 1, dir,[curnode.blank[0] + directions[dir][0], curnode.blank[1] + directions[dir][1]])
+                comparisons +=1
+                break
             elif(hashval not in hashes):
-                hashes.append(hashval)
-                newNode = Node(newMat, curnode, curnode.f + 1, dir,[x + y for x,y in zip(curnode.blank, directions[dir])])
-                print(newNode.c)
+                hashes[hashval] = True
+                comparisons += 1
+                newNode = Node(newMat, curnode, curnode.f + 1, dir,[curnode.blank[0] + directions[dir][0], curnode.blank[1] + directions[dir][1]])
                 heappush(nodes,newNode )
+    return
 
 def validMove(curnode : Node, dir):
-    try:
-        testdir = [x + y for x,y in zip(directions[curnode.dir], directions[dir])]
-    except:
-        testdir = directions[dir]
-    if (testdir[0] == 0 and testdir[1] == 0):
-        return False
-    else:
-        newblankpos = [x + y for x,y in zip(curnode.blank, directions[dir])]
-        return (newblankpos[0] in range(0,4) and newblankpos[1] in range(0,4))
+    newblankpos = [curnode.blank[0] + directions[dir][0], curnode.blank[1] + directions[dir][1]]
+    return (newblankpos[0] in range(0,4) and newblankpos[1] in range(0,4))
 
 def swap(curnode: Node, dir):
     newmat = deepcopy(curnode.state)
@@ -68,14 +99,7 @@ def swap(curnode: Node, dir):
     newmat[newx][newy] = 16
     return newmat
 
-def hash(mat):
-    idx = 0
-    for i in range(16):
-        row = i // 4
-        col = i %4
-        val = mat[row][col]
-        idx |= i << (val * 4)
-    return idx
+
 
 def solvable(mat):
     kurang,blankidx = countKurang(mat)

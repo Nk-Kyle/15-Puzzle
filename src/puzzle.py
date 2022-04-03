@@ -11,6 +11,7 @@ def random():
     base = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
     np.random.shuffle(base)
     base = np.reshape(base,(4,4))
+    base = base.tolist()
     return base
 
 def validate(mat):

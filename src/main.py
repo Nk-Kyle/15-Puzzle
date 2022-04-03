@@ -1,6 +1,7 @@
 import fpsolver as s
 import puzzle as p
 import os
+from time import time
 
 if __name__ == '__main__':
     print('Current Working Directory: '+ os.getcwd() )
@@ -30,11 +31,22 @@ if __name__ == '__main__':
     for i in range(16):
         print('KURANG('+str(i+1) + ') = ' + str(kurang[i]))
     print("============================")
-    print("\u03a3(Kurang(i)) + X =", tot, '+', (blankidx%2),'=', tot+blankidx)
+    print("\u03a3(Kurang(i)) + X =", tot, '+', (blankidx%2),'=', tot+(blankidx%2))
 
     #Melakukan Solve jika dapat disolve
     if (not issolveable):
-        print('Configuration Can\'t Be Solved!')
+        print('\nConfiguration Can\'t Be Solved!')
     else:
-        resultNode = s.solve(initial_state)
-        print("done")
+        begin = time()
+        (path, comp) = s.solve(initial_state)
+        end = time()
+        path.reverse()
+        print('\n========Initial State========')
+        for mat in path:
+            if (mat.dir != None):
+                print('========MOVE '+ mat.dir+ '========')
+            p.print_puzzle(mat.state)
+        print('Total Gerakan =', len(path)-1)
+        print("Total simpul dibangkitkan =", comp)
+        print("Elapsed time =", end-begin)
+        
