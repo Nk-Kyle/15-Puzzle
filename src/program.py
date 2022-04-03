@@ -56,6 +56,8 @@ def getVal(entry):
 def solvePuzzle():
     try:
         global path
+        global idx
+        idx = 0
         disableEntries()
         solvebutton['state'] = DISABLED
         randombutton['state'] = DISABLED
