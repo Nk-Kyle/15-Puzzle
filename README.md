@@ -35,14 +35,16 @@ To use console application:
 - Do the steps according the prompts
 
 To use GUI application:
+
+![GUI PREVIEW](/assets/gui.jpg)
 - Go to src folder and open program.py (or go to bin folder, run program.exe)
 - To set grid:
   - Option 1: Manually set the grid values by changing the input boxes (4 x 4 boxes)
   - Option 2: Randomize by pressing the Random button
   - Option 3: Use configuration from file by pressing Open File Button and select wanted configuration file side effects of chosen heuristic.
 - Press Solve Button to start solving.
-
-### The program may buffer indefinitely for a complex configuration (32> steps) and take lots of memory in the runtime.
+- Press help button for more instructions.
+#### The program may buffer indefinitely for a complex configuration (32> steps) and take lots of memory in the runtime.
 
 ## Setup
 You need to have python installed in your machine (or using venv in vscode)
