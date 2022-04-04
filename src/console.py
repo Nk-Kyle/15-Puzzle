@@ -50,4 +50,4 @@ if __name__ == '__main__':
         print('Total Gerakan =', len(path)-1)
         print("Total simpul dibangkitkan =", comp)
         print("Elapsed time =", end-begin)
-        
+    input("Press Enter to exit...")
