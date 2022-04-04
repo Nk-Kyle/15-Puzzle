@@ -1,8 +1,8 @@
 import numpy as np
 from colorama import Fore, Style
 
-def read():
-    f = open(input("Nama File (Ex : ../test/in1.txt): "), 'r')
+def read(filepath):
+    f = open(filepath, 'r')
     mat = [[int(val) for val in line.split()] for line in f]
     validate(mat)
     return mat

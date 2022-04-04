@@ -14,7 +14,8 @@ if __name__ == '__main__':
     if(mode =='y'):
         while (True):
             try:
-                initial_state = p.read()
+                filepath = input('Input file path (ex: test/in1.txt): ')
+                initial_state = p.read(filepath)
                 p.validate(initial_state)
                 break
             except Exception as e:
