@@ -46,7 +46,7 @@ def openfile():
         messagebox.showerror("Error","Invalid input")
         return
 def help():
-    messagebox.showinfo("Help","Enter number 1-15 in the grid or press random to generate a random puzzle.\n\nPress solve to solve the puzzle.\n\nPress reset to reset the puzzle.\n\nUse arrow to navigate the puzzle.")
+    messagebox.showinfo("Help","Enter number 1-15 in the grid or press random to generate a random puzzle.\n\nPress solve to solve the puzzle.\n\nPress Open File to use configuration from existing file\n\nPress reset to reset the puzzle.\n\nUse arrow to navigate the puzzle.")
 
 def randomize():
     mat = random()
